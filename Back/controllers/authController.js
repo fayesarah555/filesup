@@ -3,29 +3,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
-// const twilio = require('twilio');
-// const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-// const libphone = require('libphonenumber-js');
 
-// const sendSMS = async (phoneNumber, message) => {
-//     try {
-//         // Format the phone number
-//         const formattedNumber = libphone.parsePhoneNumberFromString(phoneNumber, 'FR');
-//         if (!formattedNumber || !formattedNumber.isValid()) {
-//             console.error('Invalid phone number:', phoneNumber);
-//             return;
-//         }
-
-//         const response = await twilioClient.messages.create({
-//             body: message,
-//             from: '+15156746478', // Your Twilio phone number
-//             to: formattedNumber.formatInternational() // Correctly formatted number
-//         });
-//         console.log('SMS sent:', response.sid);
-//     } catch (error) {
-//         console.error('SMS send error:', error);
-//     }
-// };
 
 
 
@@ -57,24 +35,7 @@ const sendEmail = async (email, subject, name, plan, amountPaid, storageLimit) =
     });
 };
 
-// const sendSMS = async (phoneNumber, message) => {
-//     // Format for the carrier's SMS gateway; you'll need to adjust based on carrier
-//     const smsGatewayAddress = `${phoneNumber}@txt.att.net`; // Example for AT&T
 
-//     const smsOptions = {
-//         from: 'Fayesarah98@gmail.com',
-//         to: smsGatewayAddress,
-//         text: message
-//     };
-
-//     transporter.sendMail(smsOptions, function(error, info) {
-//         if (error) {
-//             console.log('SMS send error:', error);
-//         } else {
-//             console.log('SMS sent: ' + info.response);
-//         }
-//     });
-// };
 exports.signup = async (req, res) => {
     const { name, email, password, phone, billing_address, plan } = req.body;
     try {
@@ -118,8 +79,7 @@ exports.signup = async (req, res) => {
                         selectedPlan.price.toFixed(2), 
                         selectedPlan.storageLimit
                     );
-                    // const smsMessage = `Hello ${name}, your registration is complete. Details: €${selectedPlan.price} for ${selectedPlan.storageLimit}MB. FileSup.`;
-                    // await sendSMS(phone, smsMessage); // Send SMS after email
+
         res.status(201).json({ message: 'Signup and payment successful', clientSecret: paymentIntent.client_secret });
     } catch (error) {
         console.error('Signup/payment error:', error);
